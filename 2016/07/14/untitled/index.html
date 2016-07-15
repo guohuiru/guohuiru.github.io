@@ -4,13 +4,18 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>小郭子 | Hexo</title>
+    <title>Hexo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="ghr">
     
-    <meta name="description" content="#初试makedown
-Makedown中文语法">
+    <meta name="description" content="#ES6 的一点笔记
+
+##字符串新增方法
+includes()：返回布尔值，表示是否找到了参数字符串。
+startsWith()：返回布尔值，表示参数字符串是否在源字符串的头部。
+endsWith()：返回布尔值，表示参数字符串是否在源字符串的尾部。
+｀var s = &#39;Hello world!&#39;">
     
     
     
@@ -66,15 +71,15 @@ Makedown中文语法">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/07/13/My-New-Post/" title="小郭子" itemprop="url">小郭子</a>
+      <a href="/2016/07/14/untitled/" title="" itemprop="url"></a>
   </h1>
   <p class="article-author">By
     
       <a href="http://yoursite.com" title="ghr">ghr</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-07-13T04:28:18.000Z" itemprop="datePublished">2016-07-13</time>
-    Updated:<time datetime="2016-07-15T02:34:52.000Z" itemprop="dateModified">2016-07-15</time>
+    <time datetime="2016-07-14T10:30:14.000Z" itemprop="datePublished">2016-07-14</time>
+    Updated:<time datetime="2016-07-15T02:24:57.000Z" itemprop="dateModified">2016-07-15</time>
     
   </p>
 </header>
@@ -86,8 +91,145 @@ Makedown中文语法">
 		
 		</div>
 		
-		<p>#初试makedown</p>
-<p><a href="http://wowubuntu.com/markdown/#list" target="_blank" rel="external">Makedown中文语法</a></p>
+		#ES6 的一点笔记
+
+##字符串新增方法
+includes()：返回布尔值，表示是否找到了参数字符串。
+startsWith()：返回布尔值，表示参数字符串是否在源字符串的头部。
+endsWith()：返回布尔值，表示参数字符串是否在源字符串的尾部。
+｀var s = 'Hello world!';
+
+s.startsWith('Hello') // true
+s.endsWith('!') // true
+s.includes('o') // true｀
+这三个方法都支持第二个参数，表示开始搜索的位置
+｀var s = 'Hello world!';
+s.startsWith('world', 6) // true
+s.endsWith('Hello', 5) // true
+s.includes('Hello', 6) // false｀
+
+repeat方法返回一个新字符串，表示将原字符串重复n次。
+padStart用于头部补全，padEnd用于尾部补全
+
+##模版字符串
+｀// 字符串中嵌入变量
+var name = "Bob", time = "today";
+`Hello ${name}, how are you ${time}?`//Hello Bob, how are you today?｀
+
+
+//所有模板字符串的空格和换行，都是被保留的，比如首个string前面会有一个换行。如果你不想要这个换行，可以使用trim方法消除它。
+｀console.log(`
+string text line 1
+string text line 2`.trim｀
+
+//...内心有些不能接受
+｀let str = 'return ' + '`Hello ${name}!`';
+let func = new Function('name', str);
+func('Jack') // "Hello Jack!"｀
+
+// 写法二
+｀let str = '(name) => `Hello ${name}!`';
+let func = eval.call(null, str);
+func('Jack') ｀
+
+##关于数组
+
+keys()是对键名的遍历、values()是对键值的遍历，entries()是对键值对的遍历。
+
+｀for (let index of ['a', 'b'].keys()) {
+  console.log(index);
+}
+// 0
+// 1
+
+for (let elem of ['a', 'b'].values()) {
+  console.log(elem);
+}
+// 'a'
+// 'b'
+
+for (let [index, elem] of ['a', 'b'].entries()) {
+  console.log(index, elem);
+}
+// 0 "
+`
+
+
+###some():
+对数组中的每个元素都执行一次指定的函数（callback），
+直到此函数返回 true，如果发现这个元素，
+some 将返回 true，如果回调函数对每个元素执行后都返回 false ，
+some 将返回 false。它只对数组中的非空元素执行指定的函数，没有赋值或者已经删除的元素将被忽略。
+
+
+扩展运算符（...）也会将空位转为undefined
+
+Array.from方法会将数组的空位，转为undefined，也就是说，这个方法不会忽略空位。
+
+
+
+ES6引入rest参数（形式为“...变量名”），用于获取函数的多余参数，这样就不需要使用arguments对象了。rest参数搭配的变量是一个数组，该变量将多余的参数放入数组中。
+
+`function add(...values) {
+  let sum = 0;
+
+  for (var val of values) {
+    sum += val;
+  }
+
+  return sum;
+}
+
+add(2, 5, 3) // 10`
+
+
+任何Iterator接口的对象，都可以用扩展运算符转为真正的数组。
+
+`var nodeList = document.querySelectorAll('div');
+var array = [...nodeList];`
+
+
+对于这种嵌套的对象，一旦遇到同名属性，Object.assign的处理方法是替换，而不是添加。
+
+`var target = { a: { b: 'c', d: 'e' } }
+var source = { a: { b: 'hello' } }
+Object.assign(target, source)
+// { a: { b: 'hello' } }`
+
+
+Object.assign方法有很多用处。
+
+（1）为对象添加属性
+
+`class Point {
+  constructor(x, y) {
+    Object.assign(this, {x, y});
+  }
+}
+`
+上面方法通过Object.assign方法，将x属性和y属性添加到Point类的对象实例。
+
+
+
+
+2）为对象添加方法
+
+`Object.assign(SomeClass.prototype, {
+  someMethod(arg1, arg2) {
+    ···
+  },
+  anotherMethod() {
+    ···
+  }
+});`
+
+// 等同于下面的写法
+`SomeClass.prototype.someMethod = function (arg1, arg2) {
+  ···
+};
+SomeClass.prototype.anotherMethod = function () {
+  ···
+};`
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -97,7 +239,7 @@ Makedown中文语法">
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2016/07/13/My-New-Post/" data-title="小郭子 | Hexo" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2016/07/14/untitled/" data-title="Hexo" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -107,7 +249,7 @@ Makedown中文语法">
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/2016/07/14/untitled/" title="">
+ <a href="/2016/07/15/初识ES6/" title="">
   <strong>PREVIOUS:</strong><br/>
   <span>
   (no title)</span>
@@ -116,9 +258,9 @@ Makedown中文语法">
 
 
 <div class="next">
-<a href="/2016/07/13/hello-world/"  title="Hello World">
+<a href="/2016/07/13/My-New-Post/"  title="小郭子">
  <strong>NEXT:</strong><br/> 
- <span>Hello World
+ <span>小郭子
 </span>
 </a>
 </div>
